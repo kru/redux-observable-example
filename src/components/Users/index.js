@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Text, Button, TouchableOpacity, Image } from 'react-native';
 
 const Users = ({ data }) => {
-    console.log('PROPS', data);
     return (
         <View
             style={{
@@ -40,7 +39,7 @@ const Users = ({ data }) => {
                 <Text style={{ flex: 1 }}>{`Username: ${
                     data.item.login
                 }`}</Text>
-                <Text style={{ flex: 1 }}>{`User ID: ${data.item.id}`}</Text>
+                <Text style={{ flex: 1 }}>{`Score: ${data.item.score}`}</Text>
                 <Text style={{ flex: 1 }}>{`Url: ${data.item.html_url}`}</Text>
             </View>
         </View>

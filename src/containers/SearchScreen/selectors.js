@@ -7,8 +7,8 @@ export const getUserRepos = () =>
         state.get('userRepos').toJS()
     );
 
-export const getInputValue = () =>
-    createSelector(selectUserRepoReducer(), state => state.get('fieldValue'));
+export const getUsername = () =>
+    createSelector(selectUserRepoReducer(), state => state.get('username'));
 
 export const getUserReposRejected = () =>
     createSelector(selectUserRepoReducer(), state => state.get('rejected'));

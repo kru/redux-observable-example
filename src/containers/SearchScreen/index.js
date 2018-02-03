@@ -1,18 +1,34 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, FlatList } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    FlatList,
+    Button,
+    TouchableOpacity
+} from 'react-native';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import * as actions from './actions';
 import * as selectors from './selectors';
 
+import Users from '../../components/Users';
+
 class SearchScreen extends Component<{}> {
-    handlePress = username => this.props.fetchUserRepos(username);
+    handleSearch = username => {
+        if (username) {
+            return this.props.fetchUserRepos(username);
+        }
+        this.props.clearTextInput();
+        this.props.fetchUserReposFullfilled([]);
+    };
+
+    handlePress = () => this.props.sortUserRepos();
 
     _keyExtractor = (item, index) => item.id;
 
     render() {
-        console.log('REPOS', this.props.userRepos);
         return (
             <View
                 style={{
@@ -20,19 +36,45 @@ class SearchScreen extends Component<{}> {
                     marginTop: '15%'
                 }}
             >
-                <TextInput
+                <View
                     style={{
-                        height: 20,
-                        borderColor: '#36fbe4',
-                        borderWidth: 1
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'flex-start',
+                        marginBottom: 50
                     }}
-                    onChangeText={value => this.handlePress(value)}
-                    value={this.props.fieldValue}
-                    autoCapitalize="none"
-                />
-                {/* <View>
+                >
+                    <TextInput
+                        style={{
+                            height: 30,
+                            width: '80%',
+                            borderColor: '#36fbe4',
+                            borderWidth: 1,
+                            marginLeft: '5%'
+                        }}
+                        onChangeText={value => this.handleSearch(value)}
+                        value={this.props.username}
+                        autoCapitalize="none"
+                    />
+                    <TouchableOpacity
+                        style={{
+                            height: 30,
+                            borderWidth: 1,
+                            borderColor: 'blue',
+                            backgroundColor: '#def436'
+                        }}
+                    >
+                        <Button
+                            title="sort"
+                            onPress={this.handlePress}
+                            style={{ fontSize: 30 }}
+                            disabled={this.props.userRepos == 0}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View>
                     <FlatList
-                        data={this.props.users}
+                        data={this.props.userRepos.items}
                         renderItem={item => <Users data={item} />}
                         keyExtractor={this._keyExtractor}
                         ItemSeparatorComponent={() => (
@@ -48,7 +90,7 @@ class SearchScreen extends Component<{}> {
                             />
                         )}
                     />
-                </View> */}
+                </View>
             </View>
         );
     }
@@ -56,7 +98,7 @@ class SearchScreen extends Component<{}> {
 
 const mapStateToProps = () =>
     createStructuredSelector({
-        fieldValue: selectors.getInputValue(),
+        username: selectors.getUsername(),
         userRepoRejected: selectors.getUserReposRejected(),
         userRepos: selectors.getUserRepos()
     });
